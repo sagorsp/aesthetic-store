@@ -1,0 +1,4 @@
+<?php
+namespace App\Models;
+use Illuminate\Database\Eloquent\Model; use Illuminate\Database\Eloquent\Relations\HasMany; use Illuminate\Database\Eloquent\Relations\BelongsTo;
+class Order extends Model { protected $fillable=['user_id','order_number','customer_name','phone','email','district','area','address','note','subtotal','delivery_charge','total','payment_method','payment_status','payment_id','transaction_id','status','stock_committed','courier_provider','courier_tracking_code']; protected function casts():array{return ['subtotal'=>'decimal:2','delivery_charge'=>'decimal:2','total'=>'decimal:2','stock_committed'=>'boolean'];} public function items():HasMany{return $this->hasMany(OrderItem::class);} public function user():BelongsTo{return $this->belongsTo(User::class);} public function payments():HasMany{return $this->hasMany(Payment::class);} public function shipmentEvents():HasMany{return $this->hasMany(ShipmentEvent::class);} }

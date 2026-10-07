@@ -1,0 +1,3 @@
+<?php
+namespace App\Services; use Illuminate\Support\Facades\Http; use Illuminate\Support\Facades\Log;
+class SmsService { public function send(string $phone,string $message):bool { $url=config('services.sms.url'); if(!config('services.sms.enabled')||!$url){Log::info('SMS disabled',['phone'=>$phone,'message'=>$message]);return false;} try{$r=Http::timeout(15)->post($url,['api_key'=>config('services.sms.api_key'),'sender_id'=>config('services.sms.sender_id'),'phone'=>$phone,'message'=>$message]);return $r->successful();}catch(\Throwable $e){Log::warning('SMS failed',['error'=>$e->getMessage()]);return false;} } }

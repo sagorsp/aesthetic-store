@@ -1,0 +1,6 @@
+<?php
+use Illuminate\Http\Request;
+define('LARAVEL_START', microtime(true));
+if (file_exists($maintenance = __DIR__.'/../aesthetic-store/storage/framework/maintenance.php')) { require $maintenance; }
+require __DIR__.'/../aesthetic-store/vendor/autoload.php';
+(require_once __DIR__.'/../aesthetic-store/bootstrap/app.php')->handleRequest(Request::capture());

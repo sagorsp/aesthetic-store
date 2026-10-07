@@ -1,0 +1,7 @@
+@extends('layouts.admin')
+@section('title','Delivery Charges')
+@section('content')
+<h1 class="text-3xl font-bold mb-6">Delivery charge by district</h1>
+<form method="post" action="{{ route('admin.delivery-zones.store') }}" class="as-card p-5 grid md:grid-cols-4 gap-3 mb-6">@csrf<input class="input input-bordered" name="district" placeholder="District" required><input class="input input-bordered" type="number" step="0.01" name="charge" placeholder="Charge" required><label class="flex items-center gap-2"><input type="checkbox" class="checkbox" name="is_active" value="1" checked> Active</label><button class="btn bg-[#B91C2C] text-white">Add</button></form>
+<div class="grid gap-3">@foreach($zones as $z)<div class="as-card p-4"><form class="grid md:grid-cols-[1fr_180px_120px_auto] gap-3 items-center" method="post" action="{{ route('admin.delivery-zones.update',$z) }}">@csrf @method('PUT')<input class="input input-bordered input-sm" name="district" value="{{ $z->district }}"><input class="input input-bordered input-sm" name="charge" value="{{ $z->charge }}"><label class="flex gap-2 items-center"><input type="checkbox" name="is_active" value="1" @checked($z->is_active)> Active</label><button class="btn btn-sm">Save</button></form><form method="post" action="{{ route('admin.delivery-zones.destroy',$z) }}" class="mt-2 text-right">@csrf @method('DELETE')<button class="btn btn-xs btn-ghost text-error">Delete</button></form></div>@endforeach</div>
+@endsection

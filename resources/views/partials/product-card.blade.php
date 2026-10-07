@@ -1,0 +1,6 @@
+<div class="product-card card bg-base-100 border border-base-200 transition duration-200 overflow-hidden">
+    <a href="{{ route('product.show',$product->slug) }}" class="block aspect-square bg-[#FAF7F0] overflow-hidden">
+        @if($product->image)<img src="{{ asset('storage/'.$product->image) }}" alt="{{ $product->name }}" class="w-full h-full object-cover">@else<div class="w-full h-full grid place-items-center text-6xl text-base-content/20">AS</div>@endif
+    </a>
+    <div class="card-body p-4"><div class="text-xs text-base-content/50">{{ $product->category?->name }}</div><a href="{{ route('product.show',$product->slug) }}" class="font-semibold leading-snug hover:text-[#B91C2C]">{{ $product->name }}</a><div class="flex items-center gap-2 mt-1"><span class="font-bold text-[#B91C2C]">{{ config('store.symbol') }}{{ number_format($product->price) }}</span>@if($product->compare_price)<span class="line-through text-sm text-base-content/40">{{ config('store.symbol') }}{{ number_format($product->compare_price) }}</span>@endif</div><form action="{{ route('cart.add',$product) }}" method="post" class="mt-2">@csrf<button class="btn btn-sm w-full bg-[#111111] text-white hover:bg-[#B91C2C] border-0" @disabled($product->stock<1)>{{ $product->stock>0?'Add to cart':'Out of stock' }}</button></form></div>
+</div>

@@ -1,0 +1,6 @@
+<?php
+namespace App\Http\Controllers;
+use App\Models\Product; use App\Models\ProductVariant; use App\Services\CartService; use Illuminate\Http\Request;
+class CartController extends Controller { public function __construct(private CartService $cart){} public function index(){return view('cart',['items'=>$this->cart->items(),'subtotal'=>$this->cart->subtotal()]);}
+public function add(Request $r,Product $product){$d=$r->validate(['quantity'=>'nullable|integer|min:1','variant_id'=>'nullable|integer|exists:product_variants,id']);$variant=null;if(!empty($d['variant_id'])){$variant=ProductVariant::where('product_id',$product->id)->where('is_active',true)->findOrFail($d['variant_id']);} elseif($product->activeVariants()->exists()){return back()->with('error','Please select a product variant.');}$stock=$variant?->stock??$product->stock;abort_if(!$product->is_active||$stock<1,422,'Product unavailable');$this->cart->add($product,(int)($d['quantity']??1),$variant);return back()->with('success','Added to cart.');}
+public function update(Request $r,string $key){$d=$r->validate(['quantity'=>'required|integer|min:0']);$this->cart->update($key,(int)$d['quantity']);return back()->with('success','Cart updated.');} public function remove(string $key){$this->cart->remove($key);return back()->with('success','Item removed.');} }
